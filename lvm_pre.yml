@@ -1,0 +1,30 @@
+- name: create volume group 2G
+  hosts: dev, test
+  tasks:
+    - name: Create partition for LVM 2G
+      parted:
+        device: /dev/vdb
+        number: 1
+        flags: [ lvm ]
+        state: present
+        part_start: 1MiB
+        part_end: 2GiB
+    - name: create research vg 2G
+      lvg:
+        vg: research
+        pvs: /dev/vdb1
+- name: create volume group 1G
+  hosts: prod
+  tasks:
+    - name: Create partition for LVM 1G
+      parted:
+        device: /dev/vdb
+        number: 1
+        flags: [ lvm ]
+        state: present
+        part_start: 1MiB
+        part_end: 1GiB
+    - name: create research vg 1G
+      lvg:
+        vg: research
+        pvs: /dev/vdb1
