@@ -1,0 +1,21 @@
+- name: 创建 Web 内容目录
+  hosts: dev
+  roles:
+          - apache
+  tasks:
+          - name: dir webdev
+            file:
+                    path: /webdev
+                    state: directory
+                    group: webdev
+                    mode: u=rwx,g=rwxs,o=rx
+          - name: link webdev /var/www/html/webdev
+            file:
+                    src: /webdev
+                    dest: /var/www/html/webdev
+                    state: link
+          - name: create index.html
+            copy:
+                    content: Development
+                    dest: /webdev/index.html
+                    setype: httpd_sys_content_t

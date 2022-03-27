@@ -1,0 +1,32 @@
+- name: 创建用户帐户
+  hosts: dev,test
+  vars_files:
+          - user_list.yml
+          - locker.yml
+  tasks:
+          - name: user development
+            user:
+                    name: "{{ item.name }}"
+                    state: present
+                    groups: devops
+                    password: "{{ pw_developer | password_hash('sha512')}}"
+            loop: "{{ users }}"
+            when: item.job=="developer"
+- name: 创建用户帐户
+  hosts: prod
+  vars_files:
+          - user_list.yml
+          - locker.yml
+  tasks:
+          - name: group opsmgr
+            group:
+                    name: opsmgr
+                    state: present
+          - name: user manager
+            user:
+                    name: "{{ item.name }}"
+                    state: present
+                    groups: opsmgr
+                    password: "{{ pw_manager | password_hash('sha512')}}"
+            loop: "{{ users }}"
+            when: item.job=="manager"

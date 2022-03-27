@@ -1,0 +1,18 @@
+- name: 修改文件内容
+  hosts: all
+  tasks:
+          - name: Development
+            copy:
+                    content: Development
+                    dest: /etc/issue
+            when: "inventory_hostname in groups.dev"
+          - name: Test
+            copy:
+                    content: Test
+                    dest: /etc/issue
+            when: "inventory_hostname in groups.test"
+          - name: Production
+            copy:
+                    content: Production
+                    dest: /etc/issue
+            when: "inventory_hostname in groups.prod"

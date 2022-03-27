@@ -1,0 +1,8 @@
+---
+- hosts: all
+  vars:
+    timesync_ntp_servers:
+      - hostname: 172.25.254.254
+        iburst: yes
+  roles:
+    - timesync

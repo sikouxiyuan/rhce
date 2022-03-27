@@ -1,0 +1,29 @@
+- name: 创建和使用逻辑卷
+  hosts: all
+  tasks:
+          - name: 1500M or 800M
+            block:
+                    - name: 1500M
+                      lvol:
+                              vg: research
+                              lv: data
+                              size: 1500
+            rescue:
+                    - name: msg800
+                      debug:
+                              msg: Could not create logical volume of that size
+                    - name: 800M
+                      lvol:
+                              vg: research
+                              lv: data
+                              size: 800
+            always:
+                    - name: mkfsext4
+                      filesystem:
+                              fstype: ext4
+                              dev: /dev/research/data
+            when: "'research' in ansible_lvm.vgs"
+          - name: noM
+            debug:
+                    msg: Volume group done not exist
+            when: "'research' not in ansible_lvm.vgs"

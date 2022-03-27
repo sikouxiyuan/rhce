@@ -1,0 +1,25 @@
+- name: 安装软件包
+  hosts: dev,test,prod
+  tasks:
+          - name: install php
+            yum:
+                    name: php
+                    state: present
+          - name: install mariadb
+            yum:
+                    name: mariadb
+                    state: present
+- name: 安装软件包组
+  hosts: dev
+  tasks:
+          - name: install RPM Development Tools
+            yum:
+                    name: "@RPM Development Tools"
+                    state: present
+- name: 软件包更新
+  hosts: dev
+  tasks:
+          - name: update latest
+            yum:
+                    name: "*"
+                    state: latest
